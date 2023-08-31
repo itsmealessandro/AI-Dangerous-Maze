@@ -8,7 +8,7 @@ class environment:
     agent_pos = 0
 
     def __init__(self):
-        self.maze = ["A", 0, 0, "T"]
+        self.maze = [  "A", 0, 0, "T"]
 
     def reset(self):
         self.maze = ["A", 0, 0, "T"]
