@@ -4,5 +4,6 @@ import environment as e;
 env = e.maze()
 a = ag.agent(env)
 
-print(a.env.grid)
+for i in range(3):
+    print(a.env.grid[i])
 
