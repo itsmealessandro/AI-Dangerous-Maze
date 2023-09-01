@@ -17,16 +17,16 @@ class maze:
         # per vincere l'agente dovrà necessariamente andare sulla chiave per aprire la porta del portale che gli permetterà di vincere
 
         self.grid =  [
-            ["A","-","-","H","-","H","-","-","H","O"],
-            ["-","H","-","K","-","-","-","H","H","-"],
+            ["A","-","-","-","-","-","-","K","H","O"],
+            ["-","H","-","-","-","-","-","H","H","-"],
             ["-","-","-","H","-","-","D","P","H","T"]
             ]
     
     # funzione che viene chiamata alla fine di ogni episodio per resettare la mappa di gioco
     def reset(self):
         self.grid =  [
-            ["A","-","-","H","-","H","-","-","H","O"],
-            ["-","H","-","K","-","-","-","H","H","-"],
+            ["A","-","-","-","-","-","-","K","H","O"],
+            ["-","H","-","-","-","-","-","H","H","-"],
             ["-","-","-","H","-","-","D","P","H","T"]
             ]
         self.agent_pos = 0,0
@@ -52,7 +52,7 @@ class maze:
         # l'agente è entrato nel portale
         elif self.grid[y-1][x] == "P":
             self.grid[y][x] = "-" 
-            self.grid[1][2] = "A" 
+            self.grid[0][9] = "A" 
             self.agent_pos = 0,9
             return "portal"
         
@@ -61,7 +61,7 @@ class maze:
         
         elif self.grid[y-1][x] == "K":
             # sposto l'agente visivamente
-            self.grid[y][x] = "-" 
+            self.grid[y][x] = "X" 
             self.grid[y-1][x] = "A" 
             # segno lo spostamento nelle variabili
             self.agent_pos = y-1,x
@@ -97,7 +97,7 @@ class maze:
         
         elif self.grid[y+1][x] == "P":
             self.grid[y][x] = "-" 
-            self.grid[1][2] = "A" 
+            self.grid[0][9] = "A" 
             self.agent_pos = 0,9
             return "portal"
         
@@ -106,7 +106,7 @@ class maze:
         
         elif self.grid[y+1][x] == "K":
             # sposto l'agente visivamente
-            self.grid[y][x] = "-" 
+            self.grid[y][x] = "X" 
             self.grid[y+1][x] = "A" 
             # segno lo spostamento nelle variabili
             self.agent_pos = y+1,x
@@ -129,7 +129,7 @@ class maze:
         y = self.agent_pos[0]
         x = self.agent_pos[1]
         print("right, posizione agente: %d %d" %(y,x))
-        if x+1 > 2:
+        if x+1 > 9:
             return "out"
         
         elif self.grid[y][x+1] == "H":
@@ -140,7 +140,7 @@ class maze:
         
         elif self.grid[y][x+1] == "P":
             self.grid[y][x] = "-" 
-            self.grid[1][2] = "A" 
+            self.grid[0][9] = "A" 
             self.agent_pos = 0,9
             return "portal"
         
@@ -149,10 +149,10 @@ class maze:
         
         elif self.grid[y][x+1] == "K":
             # sposto l'agente visivamente
-            self.grid[y][x] = "-" 
+            self.grid[y][x] = "X" 
             self.grid[y][x+1] = "A" 
             # segno lo spostamento nelle variabili
-            self.agent_pos = y+1,x
+            self.agent_pos = y,x+1
 
             # segno l'apertura della porta
             self.grid[2][6] = "-"
@@ -191,10 +191,10 @@ class maze:
         
         elif self.grid[y][x-1] == "K":
             # sposto l'agente visivamente
-            self.grid[y][x] = "-" 
+            self.grid[y][x] = "X" 
             self.grid[y][x-1] = "A" 
             # segno lo spostamento nelle variabili
-            self.agent_pos = y+1,x
+            self.agent_pos = y,x-1
 
             # segno l'apertura della porta
             self.grid[2][6] = "-"
