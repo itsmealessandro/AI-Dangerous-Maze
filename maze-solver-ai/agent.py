@@ -10,15 +10,16 @@ class agent:
         self.en = environment
     
     def go_up(self):
-        return self.en.A_move_up()
+        return self.en.agent_move("up")
     
     def go_down(self):
-        return self.en.A_move_down()
+        return self.en.agent_move("down")
     
     def go_right(self):
-        return self.en.A_move_right()
+        return self.en.agent_move("right")
+    
     def go_left(self):
-        return self.en.A_move_left()
+        return self.en.agent_move("left")
     
     # episodes and steps 
     episodes_num = 0
@@ -69,7 +70,7 @@ class agent:
 
             # ciclo che determina le azioni dell'agente
             for step in range(max_steps):
-                print("---------- step %d:----------" % step)
+                print("-------------------- step %d:--------------------" % step)
                 action_index = None
                 # explore - exploit tradeoff
                 if self.exploration_rate < random.uniform(0, 1):
@@ -98,47 +99,38 @@ class agent:
                 # analisi del reward
 
                 if result == "up":
-                    reward = -0.1
+                    reward = 0
                     new_state = self.state -10 # la posizione [0][0] è lo stato 0, la [0][1] è lo stato 1, la [1][0] è lo stato 10
                 elif result == "down":
-                    reward = -0.1
+                    reward = 0
                     new_state = self.state +10
                 elif result == "right":
-                    reward = -0.1
+                    reward = 0
                     new_state = self.state + 1
                 elif result == "left":
-                    reward = -0.1
+                    reward = 0
                     new_state = self.state - 1
                 elif result == "out":
-                    reward = -100
+                    reward = -1
                     new_state = self.state
                 elif result == "win":
-                    reward = 100
+                    reward = 1
                     new_state = self.state
                     done = True
                 elif result == "hole":
                     new_state = self.state
-                    reward = -100
+                    reward = -1
                     done = True
                 elif result == "portal":
                     new_state = 9
-                    reward = 100
-                elif result == "key":
-                    reward = 100
-                    new_state = 7
-                elif result == "no key":
-                    reward = -100
-                    new_state = 7
-                elif result == "door":
-                    reward = 0
-                    new_state = self.state
+                    reward = 0.5
+                else:
+                    raise Exception("result ha un valore sbagliato")
 
                 
                 
 
-                # Update Q-table for Q(s,a)
-                print(self.state)
-                print(action_index)
+                # Aggiorno la Q table 
                 self.q_table[self.state, action_index] = self.q_table[self.state, action_index] * (1 - self.learning_rate) + \
                 self.learning_rate * (reward + self.discount_rate * np.max(self.q_table[new_state, :]))
 
@@ -151,8 +143,7 @@ class agent:
                 # stampa passo
                 print("nuova pos agente %d,%d" %(self.en.agent_pos[0],self.en.agent_pos[1]))
                 print("state: %d" % self.state)
-                for j in range(3):
-                    print(self.en.grid[j])
+                
 
                 
 

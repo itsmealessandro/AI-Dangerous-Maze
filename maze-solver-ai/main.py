@@ -4,7 +4,7 @@ import environment as e;
 env = e.maze()
 a = ag.agent(env)
 
-a.train(1000,100)
+a.train(10000,100)
 
 for i in range(3):
     print(a.en.grid[i])
