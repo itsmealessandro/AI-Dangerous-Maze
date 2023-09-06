@@ -1,21 +1,14 @@
 import random;
 import numpy as np
 import environment as env
-import search_U
+import search_element
 
 
 class agent:
-    # la griglia è la mappa di gioco
-    grid = []
     en = env.maze()
 
     def __init__(self, environment):
         self.en = environment
-        self.grid = [
-            ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
-            ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
-            ["-", "-", "-", "H", "-", "-", "-", "P", "H", "T"]
-        ]
 
     def go_up(self):
         return self.en.agent_move("up")
@@ -30,9 +23,17 @@ class agent:
         return self.en.agent_move("left")
 
     def check_portal(self):
-        posizione_U = search_U.trova_posizione_U(self.grid)
-        if posizione_U:
-            a, b = posizione_U
+        posizione_T = search_element.trova_T(self.en.grid)
+        if posizione_T:
+            a, b = posizione_T
+            return (a, b)
+        else:
+            return None
+
+    def check_self(self):
+        posizione_A = search_element.trova_A(self.en.grid)
+        if posizione_A:
+            a, b = posizione_A
             return (a, b)
         else:
             return None
@@ -138,8 +139,8 @@ class agent:
                     reward = -1
                     done = True
                 elif result == "portal":
-                    a, b = self.check_portal()
-                    new_state = self.state + (a * len(self.grid[0]) + b)
+                    a, b = self.check_self()
+                    new_state = a * len(self.en.grid[0]) + b
                     reward = 0
                 else:
                     raise Exception("result ha un valore sbagliato")
