@@ -50,7 +50,7 @@ class agent:
     min_exploration_rate = 0.01
     max_exploration_rate = 1
     # valore che disincentiva l'agente a esplorare la mappa
-    exploration_decay_rate = 0.01
+    exploration_decay_rate = 0.001
 
     # valore che influienza il peso delle nuove informazioni rispetto a quelle passate
     learning_rate = 0.1
