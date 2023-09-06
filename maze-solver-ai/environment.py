@@ -96,6 +96,9 @@ class maze:
             a, b = self.portal_target
             self.grid[a][b] = "A"
 
+            # rimuovo il portale visivamente
+            self.grid[newY][newX]= "-"
+
             # segno lo spostamento nelle varaibili 
             self.agent_pos = a, b
             for j in range(3): print(self.grid[j])
