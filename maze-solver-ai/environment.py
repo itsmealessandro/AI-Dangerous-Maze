@@ -8,7 +8,16 @@ class maze:
     # la posizione dell'agente è una coppia, il primo numero rappresenta l'asse X, il secondo l'asse Y
     agent_pos = 0, 0
 
-    portal_target = 0, 9
+    portal_target = 0, 0
+
+    # metodo che serve a trovare le coordinate del portale
+    def check_portal(self):
+        posizione_T = search_element.trova_O(self.grid)
+        if posizione_T:
+            a, b = posizione_T
+            return (a, b)
+        else:
+            return None
 
     def __init__(self):
         # "A": rappresenta la posizione dell'agente
@@ -23,6 +32,8 @@ class maze:
             ["-", "-", "-", "H", "-", "P", "-", "-", "H", "T"]
         ]
 
+        self.portal_target = self.check_portal()
+
     # funzione che viene chiamata alla fine di ogni episodio per resettare la mappa di gioco
     def reset(self):
         self.grid = [
@@ -32,13 +43,7 @@ class maze:
         ]
         self.agent_pos = 0, 0
 
-    def check_portal(self):
-        posizione_T = search_element.trova_O(self.grid)
-        if posizione_T:
-            a, b = posizione_T
-            return (a, b)
-        else:
-            return None
+    
 
     # ******************** Agent Movements ********************
 
@@ -88,7 +93,7 @@ class maze:
 
             # spostamento visivo dell'agente
             self.grid[y][x] = "-"
-            a, b = self.check_portal()
+            a, b = self.portal_target
             self.grid[a][b] = "A"
 
             # segno lo spostamento nelle varaibili 
