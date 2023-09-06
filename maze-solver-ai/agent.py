@@ -23,9 +23,9 @@ class agent:
         return self.en.agent_move("left")
 
     def check_portal(self):
-        posizione_T = search_element.trova_T(self.en.grid)
-        if posizione_T:
-            a, b = posizione_T
+        posizione_O = search_element.trova_O(self.en.grid)
+        if posizione_O:
+            a, b = posizione_O
             return (a, b)
         else:
             return None

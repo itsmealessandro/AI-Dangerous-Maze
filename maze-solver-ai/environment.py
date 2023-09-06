@@ -19,21 +19,21 @@ class maze:
 
         self.grid = [
             ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
-            ["P", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
-            ["-", "-", "-", "H", "-", "-", "-", "-", "H", "T"]
+            ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+            ["-", "-", "-", "H", "-", "P", "-", "-", "H", "T"]
         ]
 
     # funzione che viene chiamata alla fine di ogni episodio per resettare la mappa di gioco
     def reset(self):
         self.grid = [
             ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
-            ["P", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
-            ["-", "-", "-", "H", "-", "-", "-", "-", "H", "T"]
+            ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+            ["-", "-", "-", "H", "-", "P", "-", "-", "H", "T"]
         ]
         self.agent_pos = 0, 0
 
     def check_portal(self):
-        posizione_T = search_element.trova_T(self.grid)
+        posizione_T = search_element.trova_O(self.grid)
         if posizione_T:
             a, b = posizione_T
             return (a, b)
