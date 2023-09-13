@@ -10,6 +10,8 @@ class agent:
     def __init__(self, environment):
         self.en = environment
 
+
+    # ******************* Agent Movements *******************
     def go_up(self):
         return self.en.agent_move("up")
 
@@ -22,26 +24,20 @@ class agent:
     def go_left(self):
         return self.en.agent_move("left")
 
-    def check_portal(self):
-        posizione_O = search_element.trova_O(self.en.grid)
-        if posizione_O:
-            a, b = posizione_O
-            return (a, b)
-        else:
-            return None
-
+    # funzione necessaria per trovare l'agente sulla mappa
     def check_self(self):
         posizione_A = search_element.trova_A(self.en.grid)
         if posizione_A:
             a, b = posizione_A
             return (a, b)
-        else:
-            return None
+        raise Exception("Non è stato trovato l'agente")
+        
+        
 
-    # episodes and steps 
+    # variabili rappresentati il numero di episodi da eseguire e il numero massimo di passi per ogni episodio
     episodes_num = 0
     steps_max = 0
-
+    # variabile necessaria per l'analisi finale del lavoro svolto dall'agente
     rewards_all_episodes = []
 
     # ************************************************ Q learing variables ************************************************
@@ -49,17 +45,18 @@ class agent:
     exploration_rate = 1
     min_exploration_rate = 0.01
     max_exploration_rate = 1
+
     # valore che disincentiva l'agente a esplorare la mappa
     exploration_decay_rate = 0.001
 
-    # valore che influienza il peso delle nuove informazioni rispetto a quelle passate
+    # valore che influienza l'importanza delle nuove informazioni rispetto a quelle passate
     learning_rate = 0.1
 
     # valore che influenza il peso dei futuri rewards rispetto a quelli immediati
     discount_rate = 0.99
 
     # Tabella che tiene traccia delle ricompense ottenute per ogni possibile azione ad ogni possibile stato
-    q_table = np.zeros((30, 4))  # 30 stati e 4 azioni possibili per ogni stato, quindi una matrice 30x2
+    q_table = np.zeros((30, 4))  # 30 stati e 4 azioni possibili per ogni stato, quindi una matrice 30x4
 
     # valore che definisce in che stato si trova l'agente
     state = 0
@@ -71,14 +68,18 @@ class agent:
 
         # ************************************ Inizio algoritmo di Q learing ************************************ 
         for episode in range(num_ep):
+
             # resetto la posizione dell'agente e la mappa
             self.en.reset()
             self.state = 0
-            # varaibile per sapere se è terminato l'episodio prima dei massimi step
+
+            # variabile per sapere se è terminato l'episodio per una evento specifico, prima del raggiungimento degli step massimi
             done = False
 
+            # definisce il valore della ricompense ottenute in questo episodio
             rewards_current_episode = 0
 
+            # contatori utili per sapere quando l'agente sceglie di esplorare oppure quando decide di fare un'azione ragionata
             count_Q = 0
             count_R = 0
 
@@ -91,8 +92,8 @@ class agent:
                 action_index = None
                 # explore - exploit tradeoff
                 if self.exploration_rate < random.uniform(0, 1):
-                    # sceglie l'azione con qualità maggiore
 
+                    # sceglie l'azione con qualità maggiore
                     action_index = np.argmax(self.q_table[self.state, :])
                     count_Q += 1
                 else:
@@ -101,7 +102,7 @@ class agent:
 
                     count_R += 1
 
-                # cerco l'azione corrispondete al valore
+                # cerco ed eseguo l'azione corrispondete al valore
                 if action_index == 0:
                     result = self.go_up()
                 elif action_index == 1:
@@ -113,8 +114,8 @@ class agent:
 
                 reward = None
                 new_state = None
-                # analisi del reward
 
+                # analisi del reward
                 if result == "up":
                     reward = 0
                     new_state = self.state - 10  # la posizione [0][0] è lo stato 0, la [0][1] è lo stato 1, la [1][0] è lo stato 10
@@ -161,8 +162,10 @@ class agent:
                 print("nuova pos agente %d,%d" % (self.en.agent_pos[0], self.en.agent_pos[1]))
                 print("state: %d" % self.state)
 
-                # controllo se abbiamo terminato l'episodio + episode reward
+                
                 rewards_current_episode += reward
+                
+                # controllo se abbiamo terminato l'episodio
                 if done == True and result == "win":
                     print("Vittoria")
                     result = None
@@ -175,11 +178,11 @@ class agent:
                 # resetto result
                 result = None
 
-            # Exploration rate decay
+            # Exploration rate decay -> più passa il tempo, più l'agente smetterà di esplorare e farà scelte ragionate
             self.exploration_rate = self.min_exploration_rate + \
                                     (self.max_exploration_rate - self.min_exploration_rate) * np.exp(
                 -self.exploration_decay_rate * episode)
-            # Add current episode reward to total rewards list
+            
             self.rewards_all_episodes.append(rewards_current_episode)
 
             print("CountQ: %d , CountR: %d" % (count_Q, count_R))

@@ -5,11 +5,13 @@ import random
 class maze:
     # la griglia è la mappa di gioco
     grid = []
+    #variabili per selezionare quale griglia usare
     num_grid = 0
     grids = []
+
     # la posizione dell'agente è una coppia, il primo numero rappresenta l'asse X, il secondo l'asse Y
     agent_pos = 0, 0
-
+    # posizione portale
     portal_target = 0, 0
 
     # metodo che serve a trovare le coordinate del portale
@@ -82,8 +84,6 @@ class maze:
         print("%s, posizione agente: %d %d" % (move, y, x))
 
         # controllo se il movimento fa uscire l'agente dalla mappa
-
-        # può essere ancora raggrupato mettendo 3 or, però renderebbe il codice meno leggibile (imho)
         if move == "up" and y - 1 < 0:
             return "out"
 
@@ -96,7 +96,7 @@ class maze:
         elif move == "left" and x - 1 < 0:
             return "out"
 
-        # preparo le variabili relative alla posizione dell'agente in base alla mossa
+        # preparo le variabili relative alla futura posizione dell'agente
         if move == "up":
             newY = y - 1
             newX = x
