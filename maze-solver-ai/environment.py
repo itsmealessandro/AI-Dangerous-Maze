@@ -1,10 +1,12 @@
 import search_element
+import random
 
 
 class maze:
     # la griglia è la mappa di gioco
     grid = []
-
+    num_grid = 0
+    grids = []
     # la posizione dell'agente è una coppia, il primo numero rappresenta l'asse X, il secondo l'asse Y
     agent_pos = 0, 0
 
@@ -25,25 +27,51 @@ class maze:
         # "H": rappresenta un buco, se l'agente ci finisce sopra ricomincia da capo
         # "T": rappresenta il target, se l'agente ci finisce sopra vice
         # "P": rappresenta un portale che manderà l'agente sulla cella rappresentata dalla lettera "O"
-
-        self.grid = [
+        grid1 = [
             ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
             ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
             ["-", "-", "-", "H", "-", "P", "-", "-", "H", "T"]
         ]
+
+        grid2 = [
+            ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
+            ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+            ["T", "-", "-", "-", "-", "P", "-", "-", "-", "-"]
+        ]
+
+        grid3 = [
+            ["A", "-", "-", "-", "T", "-", "-", "-", "H", "O"],
+            ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+            ["-", "-", "-", "H", "-", "P", "-", "-", "H", "-"]
+        ]
+
+        self.grids = [grid1, grid2, grid3]
+        self.num_grid = random.randint(0, 2)
+        self.grid = self.grids[self.num_grid]
 
         self.portal_target = self.check_portal()
 
     # funzione che viene chiamata alla fine di ogni episodio per resettare la mappa di gioco
     def reset(self):
-        self.grid = [
-            ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
-            ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
-            ["-", "-", "-", "H", "-", "P", "-", "-", "H", "T"]
-        ]
+        if self.num_grid == 0:
+            self.grid = [
+                ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
+                ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+                ["-", "-", "-", "H", "-", "P", "-", "-", "H", "T"]
+            ]
+        elif self.num_grid == 1:
+            self.grid = [
+                ["A", "-", "-", "-", "-", "-", "-", "-", "H", "O"],
+                ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+                ["T", "-", "-", "-", "-", "P", "-", "-", "-", "-"]
+            ]
+        elif self.num_grid == 2:
+            self.grid = [
+                ["A", "-", "-", "-", "T", "-", "-", "-", "H", "O"],
+                ["-", "H", "-", "-", "-", "-", "-", "H", "H", "-"],
+                ["-", "-", "-", "H", "-", "P", "-", "-", "H", "-"]
+            ]
         self.agent_pos = 0, 0
-
-    
 
     # ******************** Agent Movements ********************
 
@@ -97,7 +125,7 @@ class maze:
             self.grid[a][b] = "A"
 
             # rimuovo il portale visivamente
-            self.grid[newY][newX]= "-"
+            self.grid[newY][newX] = "-"
 
             # segno lo spostamento nelle varaibili 
             self.agent_pos = a, b
